@@ -16,7 +16,13 @@ def main():
     for path in files:
         rel = path.relative_to(root)
         assert not {'memories', 'private', '__pycache__'} & set(rel.parts), rel
-        if rel.as_posix() in {'docs/images/request-brief.png', 'docs/images/request-template.png'}:
+        if rel.as_posix() in {
+            'docs/images/request-brief.png',
+            'docs/images/request-template.png',
+            'docs/images/showcase-algorithms.png',
+            'docs/images/showcase-architecture.png',
+            'docs/images/showcase-course-design.png',
+        }:
             assert path.read_bytes().startswith(b'\x89PNG\r\n\x1a\n'), f'Invalid PNG: {rel}'
             continue
         assert path.suffix in {'.md', '.py', '.ps1', '.yaml', '.yml'} or path.name in {'.gitignore', 'LICENSE'}, rel
