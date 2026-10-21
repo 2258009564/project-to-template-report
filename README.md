@@ -1,5 +1,7 @@
 # 更适合哈理工宝宝体质的 Word 报告 Skill
 
+[下载最新 Release](https://github.com/2258009564/project-to-template-report/releases/latest) · [查看所有版本](https://github.com/2258009564/project-to-template-report/releases)
+
 **交给它模板和材料，说一句话，把写报告、改表达、套格式和检查页面交给 AI。**
 
 课程报告、实验报告、课程设计，麻烦的往往不止是“写点内容”：老师给的封面不能动，正文得按模板来，目录要能更新，图表要放得下；换一次会话，又得重新交代姓名、学号和自己的要求。
@@ -27,6 +29,18 @@
 **模板里写了什么要求，助手就自己读、自己拆解、接着做。** 章节要写什么、哪里需要图表、哪些格式要保留，都从模板中识别；正文编写、图表生成、审稿和页面检查按流程完成，不需要你逐项提醒。模板已包含题目和充分要求时，可以只给模板启动；涉及实际项目或实验结果，再使用已有材料或补充必要事实。
 
 这里需要能访问本地文件、调用工具的 AI 助手。内置自动化使用 Windows 上的 Microsoft Word；具体环境与手动安装方法放在本文后半部分。
+
+### 也可以一行安装
+
+已经在用支持 Skills 的 AI 工具？在终端运行：
+
+```sh
+npx skills add 2258009564/project-to-template-report -g
+```
+
+按提示选择要安装到的 AI 工具即可，`-g` 表示跨项目使用。需要 Node.js 22.20 或更新版本；安装方式由开源 [Skills CLI](https://github.com/vercel-labs/skills) 提供。安装后，仍然只需把模板交给助手，说一句“帮我完成这份报告”。
+
+不想使用命令行，也可以从 [Release](https://github.com/2258009564/project-to-template-report/releases/latest) 下载 `project-to-template-report-v1.0.0.zip`，解压后交给助手导入。安装 Skill 不会自动安装 Microsoft Word 等本地运行工具。
 
 ## 一次生成，报告长这样
 
@@ -114,6 +128,8 @@
 前面的一句话适合直接交给助手处理。下面提供手动部署、运行环境和验证方式，方便自行维护。
 
 ### 手动安装与宿主能力
+
+可以通过前面的 `npx` 命令安装、从 Release 下载版本包，或自行克隆仓库：
 
 ```sh
 git clone https://github.com/2258009564/project-to-template-report.git
