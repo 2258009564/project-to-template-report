@@ -1,0 +1,4 @@
+interface:
+  display_name: "项目到模板报告"
+  short_description: "Read template formats and batch build verified Word reports"
+  default_prompt: "Use $project-to-template-report to extract my Word template's effective formatting once, preserve the cover, write structured content from my materials, batch apply formatting with the reusable Word COM engine, and verify the final report. Enable project-code review or editable diagrams only when the task requires them."
