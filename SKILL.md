@@ -20,6 +20,16 @@ Separate content from formatting. Copy the reference; preserve its cover, sectio
 
 Do not load all references or infer project/diagram requirements from this skill's name.
 
+## One request, template-driven completion
+
+A request such as “根据我的 Word 制作 skill，帮我完成以下报告” authorizes the full report workflow within the supplied template's edit boundaries. Do not require separate instructions to draft sections, generate required figures/tables, review prose or verify pages.
+
+Read the template as both a layout reference and a task specification. Extract requirements from headings, instructional text, captions, figure/table placeholders and supplied assignment directions. Map each requirement to a content block and its verification in the task-local plan. A cue such as “此处应有流程图” or “插入实验结果表” is an actionable requirement, not text to preserve in the finished report. Generate the supported content, insert it with its caption and explanation, and verify it; do not stop at describing what the user should draw or fill in. Read figure/table references when the template requires them even if the user's message never mentions diagrams or tables.
+
+When the template lacks explicit figure/table cues, choose useful figures and tables where they clarify the requested content and the allowed template structure permits them. Avoid decorative additions and preserve protected areas. The user may also request an additional figure/table without having to redesign the workflow.
+
+Use the template topic, assignment instructions, relevant local records and user-authorized materials already available before requesting more input. Draft general explanation, analysis and evidence-supported diagrams autonomously when the task is sufficiently specified. A template alone does not establish real implementation, measurements, personal experience or test results: do not invent these. Mark illustrative examples as such when the assignment permits them; resolve only genuinely blocking missing facts with a focused question, and continue independent sections. Missing required evidence is an explicit gap, not a completed figure/table or a passed report. Stop after a reviewed, verified report is delivered or the remaining concrete gap is reported.
+
 ## Local reusable information
 
 At every task start, load relevant records using [local memory and feedback learning](references/local-learning.md). Keep identity data and personalized rules outside this skill directory. Apply current instructions before older memory and avoid asking again for consistent known fields.
