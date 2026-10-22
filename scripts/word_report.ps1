@@ -1,10 +1,13 @@
-param(
+﻿param(
  [Parameter(Mandatory=$true)][ValidateSet('inspect','build')][string]$Mode,
  [Parameter(Mandatory=$true)][string]$Source,
  [Parameter(Mandatory=$true)][string]$Out,
- [string]$Plan,[switch]$Force
+ [string]$Plan,[switch]$Force,
+ [ValidateSet('Auto','PowerShell7','WindowsPowerShell')][string]$Runtime='Auto'
 )
 $ErrorActionPreference='Stop'
+. (Join-Path $PSScriptRoot 'word_runtime.ps1')
+Invoke-WordRuntime -Runtime $Runtime -ScriptPath $PSCommandPath -BoundParameters $PSBoundParameters
 $schema=2
 $Source=(Resolve-Path -LiteralPath $Source).Path
 $Out=[IO.Path]::GetFullPath($Out)
@@ -14,7 +17,7 @@ $fontNames=@('NameFarEast','NameAscii','NameOther','Size','Bold','Italic','Color
 $paraNames=@('Alignment','SpaceBefore','SpaceAfter','LineSpacingRule','LineSpacing','LeftIndent','RightIndent','FirstLineIndent','KeepWithNext','KeepTogether','WidowControl','PageBreakBefore','OutlineLevel')
 function Props($obj,$names){$h=[ordered]@{};foreach($n in $names){$h[$n]=$obj.$n};return $h}
 function Geometry($doc){$a=@();foreach($s in $doc.Sections){$a+=,(Props $s.PageSetup @('PageWidth','PageHeight','TopMargin','BottomMargin','LeftMargin','RightMargin','HeaderDistance','FooterDistance','Orientation','DifferentFirstPageHeaderFooter'))};return ,$a}
-function JsonSave($obj,$path){$dir=Split-Path -Parent $path;if($dir){[IO.Directory]::CreateDirectory($dir)|Out-Null};$obj|ConvertTo-Json -Depth 30|Set-Content -LiteralPath $path -Encoding utf8}
+function JsonSave($obj,$path){Write-WordJson -Value $obj -Path $path}
 function IsMixed($v){return ($v -is [ValueType] -and [double]$v -eq 9999999)}
 function SetWordProperty($obj,$key,$v){
  # Explicit conversion avoids PowerShell COM setter caching numeric types across dynamic member names.
@@ -24,7 +27,12 @@ function SetWordProperty($obj,$key,$v){
 }
 if($Mode -eq 'inspect' -and (Test-Path -LiteralPath $Out) -and -not $Force){
  $old=Get-Content -LiteralPath $Out -Raw -Encoding UTF8|ConvertFrom-Json
- if($old.schema -eq $schema -and $old.sha256 -eq $hash){Write-Output 'CACHE HIT';exit 0}
+ if($old.schema -eq $schema -and $old.sha256 -eq $hash){
+  # Normalize legacy BOM-bearing cache files without invoking Word again.
+  $bytes=[IO.File]::ReadAllBytes($Out)
+  if($bytes.Length -ge 3 -and $bytes[0] -eq 239 -and $bytes[1] -eq 187 -and $bytes[2] -eq 191){JsonSave $old $Out}
+  Write-Output 'CACHE HIT';exit 0
+ }
 }
 $app=$null;$doc=$null;$target=$null;$tmp=$null
 try{
@@ -69,7 +77,7 @@ try{
   [IO.Directory]::CreateDirectory((Split-Path -Parent $Out))|Out-Null
   $tmp=Join-Path (Split-Path -Parent $Out) ([IO.Path]::GetFileNameWithoutExtension($Out)+'.'+[Guid]::NewGuid().ToString('N')+'.building.docx')
   # SaveAs on the read-only source opens a new output without changing the original file.
-  $doc.SaveAs2($tmp,16);$target=$doc;$doc=$null
+  Save-WordDocx -Document $doc -Path $tmp;$target=$doc;$doc=$null
   foreach($edit in $planData.cover_cells){
    $r=$target.Tables.Item([int]$edit.table).Cell([int]$edit.row,[int]$edit.column).Range.Duplicate
    $r.End=$r.End-1;$oldFont=$r.Font.Duplicate;$oldPF=$r.ParagraphFormat.Duplicate

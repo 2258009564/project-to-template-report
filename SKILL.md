@@ -38,6 +38,8 @@ Before asking for name, student ID, class, university or major, read [local prof
 
 ## Read template once
 
+Runtime selection happens before Word COM initialization: default `-Runtime Auto` prefers PowerShell 7+ and falls back to Windows PowerShell 5.1 when unavailable. Use `-Runtime PowerShell7` or `-Runtime WindowsPowerShell` to pin it. Keep `scripts/word_runtime.ps1` beside the engine. Both versions write BOM-free UTF-8 JSON; script sources retain a BOM for 5.1 Chinese parsing. See [runtime and encoding](references/vbs-word-automation.md#runtime-selection-and-encoding).
+
 Run `scripts/word_report.ps1 -Mode inspect -Source <template> -Out <profile.json>` on Windows with Word. Cache uses source SHA-256 and schema version; `-Force` refreshes. Inspection is read-only and records effective paragraph/run formatting, sections, tables, fields and object counts. Mixed values stay explicit; never use Word's undefined sentinel as a size.
 
 Visually inspect template patterns. Select role samples outside the cover, TOC and tables for body/heading/caption roles. A style name alone is not effective formatting. Save sample indices and approved corrections in the plan. Inspect ambiguity once; avoid repeated whole-document dumps. For legacy binary files with a DOCX suffix, Word converts only the output copy.

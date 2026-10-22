@@ -1,10 +1,31 @@
 # Word COM plan and automation
 
-The reusable implementation is `scripts/word_report.ps1`, requiring Windows PowerShell and Microsoft Word. No embedded macro permissions are needed. VBS, VBA and PowerShell share Word's object model; PowerShell supplies JSON support without a generated VBS parser.
+The reusable implementation is `scripts/word_report.ps1`, requiring Windows and Microsoft Word. PowerShell 7+ is preferred; Windows PowerShell 5.1 remains a compatibility option. No embedded macro permissions are needed. VBS, VBA and PowerShell share Word's object model.
+
+## Runtime selection and encoding
+
+Both the engine and `test_word_report.ps1` accept `-Runtime Auto|PowerShell7|WindowsPowerShell`:
+
+- `Auto` (default): keep a running PowerShell 7+ host; otherwise switch to `pwsh.exe` when available. If it is missing, continue in Windows PowerShell 5.1 with a warning.
+- `PowerShell7`: require PowerShell 7+. Fail clearly if it cannot be found; do not silently downgrade.
+- `WindowsPowerShell`: explicitly run in Windows PowerShell 5.1, even if started from `pwsh`.
+
+The runtime is selected before Word is started. `word_runtime.ps1` forwards parameter values and switches via `-File`, keeps the current working directory, reports the selected runtime, and propagates child exit codes. It also saves DOCX through typed by-reference `SaveAs2` arguments to avoid the implicit-conversion problem reproduced under 5.1. Keep this helper beside the engine when copying files. Runtime selection does not provide a COM timeout or guarantee that all Word hangs disappear; no version speedup is claimed without a controlled measurement.
+
+PowerShell source files carry a UTF-8 BOM so 5.1 can parse Chinese text. Generated profiles, QA records and test JSON use explicit UTF-8 **without** BOM in both runtimes. Legacy BOM-bearing inspect caches are normalized on a cache hit without invoking Word. JSON serialization explicitly sets depth 30; PowerShell 7 also defaults to depth 2, so upgrading alone does not prevent truncation. See Microsoft's [encoding documentation](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_character_encoding) and [ConvertTo-Json documentation](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/convertto-json).
 
 ## Inspect
 
-`powershell -NoProfile -File scripts/word_report.ps1 -Mode inspect -Source template.docx -Out profile.json`
+```powershell
+# Prefer PowerShell 7 explicitly.
+pwsh -NoProfile -File scripts/word_report.ps1 -Runtime PowerShell7 -Mode inspect -Source template.docx -Out profile.json
+
+# Windows built-in entrypoint: automatically switch to 7 when installed, otherwise use 5.1.
+powershell -NoProfile -File scripts/word_report.ps1 -Mode inspect -Source template.docx -Out profile.json
+
+# Explicit compatibility mode.
+powershell -NoProfile -File scripts/word_report.ps1 -Runtime WindowsPowerShell -Mode inspect -Source template.docx -Out profile.json
+```
 
 Cache invalidates on SHA-256/schema change. Profiles include Word table paragraphs: do not mix these indices with python-docx indices. Font and paragraph dictionaries contain effective values. Mixed properties include run samples. Body samples must exclude cover, TOC, tables and empty paragraphs.
 

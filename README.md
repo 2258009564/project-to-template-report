@@ -40,7 +40,7 @@ npx skills add 2258009564/project-to-template-report -g
 
 按提示选择要安装到的 AI 工具即可，`-g` 表示跨项目使用。需要 Node.js 22.20 或更新版本；安装方式由开源 [Skills CLI](https://github.com/vercel-labs/skills) 提供。安装后，仍然只需把模板交给助手，说一句“帮我完成这份报告”。
 
-不想使用命令行，也可以从 [Release](https://github.com/2258009564/project-to-template-report/releases/latest) 下载 `project-to-template-report-v1.0.0.zip`，解压后交给助手导入。安装 Skill 不会自动安装 Microsoft Word 等本地运行工具。
+不想使用命令行，也可以从 [Release](https://github.com/2258009564/project-to-template-report/releases/latest) 下载版本 ZIP 包，解压后交给助手导入。安装 Skill 不会自动安装 Microsoft Word 等本地运行工具。
 
 ## 一次生成，报告长这样
 
@@ -143,7 +143,7 @@ git clone https://github.com/2258009564/project-to-template-report.git
 
 | 部分 | 要求与职责 |
 | --- | --- |
-| Word 自动化 | Windows、Microsoft Word、PowerShell；`scripts/word_report.ps1` 通过 Word COM 提取实际格式并生成文档。 |
+| Word 自动化 | Windows、Microsoft Word；默认优先 PowerShell 7+，未安装时以 Windows PowerShell 5.1 兼容模式运行。`scripts/word_report.ps1` 通过 Word COM 提取实际格式并生成文档。 |
 | 结构核验 | Python 辅助脚本，用于 OOXML 结构与模板约束检查。 |
 | 页面检查 | 可用的 DOCX 渲染器，或将 Word 导出的内部 PDF 渲染成页面图片的工具。仓库不包含 `render_docx.py`，最终分页以 Word 为准。 |
 | 可选图示 | 按任务配置绘图与导出工具；UML、项目取证等流程按需启用。 |
@@ -151,6 +151,20 @@ git clone https://github.com/2258009564/project-to-template-report.git
 内置生成器适合从唯一指定的段落开始替换到文末，边界前内容保留；任意局部修改或复杂格式迁移需要额外的受限适配。只改格式的任务保留原文，需要重写时应明确可编辑范围。
 
 完成质量取决于所用模型、材料和模板。模板提供格式依据，不能替代项目事实；缺失的事实会留空或明确说明。文案审查与页面核验是执行流程中的要求，仍需助手实际运行并确认结果。
+
+### PowerShell 运行时选择
+
+生成脚本和 Word 测试脚本都支持 `-Runtime Auto`（默认）、`-Runtime PowerShell7` 和 `-Runtime WindowsPowerShell`。即使从系统自带的 `powershell` 启动，默认模式也会优先切换到已安装的 `pwsh`；没有安装 7 时仍可使用 5.1，并明确提示兼容模式。指定 7 却未安装时会报错，不会悄悄降级。
+
+```powershell
+# 明确要求使用 PowerShell 7。
+pwsh -NoProfile -File scripts/word_report.ps1 -Runtime PowerShell7 -Mode inspect -Source template.docx -Out profile.json
+
+# 明确使用系统自带的 Windows PowerShell 5.1。
+powershell -NoProfile -File scripts/word_report.ps1 -Runtime WindowsPowerShell -Mode inspect -Source template.docx -Out profile.json
+```
+
+脚本保留 UTF-8 BOM 以兼容 5.1 解析中文，生成的 JSON 则统一为无 BOM 的 UTF-8。详细规则见 [运行时与编码说明](references/vbs-word-automation.md#runtime-selection-and-encoding)。切换运行时不代表所有 Word COM 卡顿都已解决。
 
 ### 本地记忆约定
 
@@ -164,10 +178,11 @@ git clone https://github.com/2258009564/project-to-template-report.git
 
 ```powershell
 python scripts/check_package.py
+./scripts/test_word_runtime.ps1 -WorkDir "$env:TEMP/word-report-runtime-test"
 ./scripts/test_word_report.ps1 -WorkDir "$env:TEMP/word-report-synthetic-test"
 ```
 
-前者检查发布文件、本地引用、Python 语法和常见泄露特征；后者用合成 Word 模板检查格式提取、缓存、目录、混合格式拒绝和原文件保护。这些检查不能代替真实报告的审稿与逐页验收，也不证明所有宿主兼容或跨会话召回效果。
+依次检查发布文件与引用、运行时选择与进程切换，以及合成 Word 模板的格式提取、缓存、目录、混合格式拒绝和原文件保护。运行时测试在同时安装 7 和 5.1 时验证两个方向的真实进程切换，否则会明确报告跳过。Word 测试可加 `-Runtime PowerShell7` 或 `-Runtime WindowsPowerShell` 分别验证；这些检查不能代替真实报告的审稿与逐页验收，也不证明所有宿主兼容或跨会话召回效果。
 
 ### 继续阅读与贡献
 
