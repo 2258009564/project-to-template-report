@@ -9,7 +9,7 @@ description: Create or update Word reports from a supplied template and factual 
 
 Follow the current user's execution and delegation preferences, including locally stored preferences when available.
 
-Separate content from formatting. Copy the reference; preserve its cover, sections, headers, footers and objects outside authorized edit ranges. Unknown formal metadata stays blank. User updates override older career plans and drafts.
+Separate content from formatting. Copy the reference; preserve its cover, sections, headers, footers and objects outside authorized edit ranges. Resolve required personal information through the mandatory identity gate below; other unknown formal metadata must not be invented. User updates override older career plans and drafts.
 
 ## Scope
 
@@ -34,7 +34,7 @@ Use the template topic, assignment instructions, relevant local records and user
 
 At every task start, load relevant records using [local memory and feedback learning](references/local-learning.md). Keep identity data and personalized rules outside this skill directory. Apply current instructions before older memory and avoid asking again for consistent known fields.
 
-Before asking for name, student ID, class, university or major, read [local profile lookup](references/local-profile.md). Reuse sourced facts from the local profile and user-specified prior documents. Distinguish the report author from teammates; document order alone does not identify the user. Current explicit user information overrides older records. Leave genuinely unresolved fields blank while continuing independent work.
+Before asking for name, student ID, class, university or major, read [local profile lookup](references/local-profile.md). Reuse sourced facts from the local profile and user-specified prior documents. Distinguish the report author from teammates; document order alone does not identify the user. Current explicit user information overrides older records. If required personal fields remain missing or conflicting after lookup, stop and ask the user in one concise batch, then wait for the answer before report generation or delivery. Do not silently leave those fields blank, guess, or bypass the gate by continuing independent sections. Only an explicit user instruction to omit or leave specific fields blank waives those fields. After the reply, apply the linked local profile and consent rules. This mandatory pause takes precedence over the general instruction to continue independent report sections.
 
 ## Read template once
 
