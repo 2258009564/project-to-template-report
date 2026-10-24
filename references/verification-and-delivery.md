@@ -25,9 +25,10 @@ When the report includes command-line evidence:
 
 - Every requested result has a capture; no monospaced text block stands in for a run.
 - Each capture shows the prompt, the executed command, the input and the program output.
-- Captures are inline, 10-11 cm wide, directly below their result caption, and the caption keeps with the image.
+- Captures are inline at a readable template-compatible width (often 10-11 cm), directly below their result caption, and the caption keeps with the image.
 - No capture is blank, black, cropped mid-line or split across pages.
 - The report names the terminal and the shell that were actually used.
+- Capture completion and exit status passed; old output after a failed capture is not reused. Raw screenshots remain available for checking crop boundaries.
 
 ## Word checks
 

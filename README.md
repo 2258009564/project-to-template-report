@@ -146,7 +146,7 @@ git clone https://github.com/2258009564/project-to-template-report.git
 | Word 自动化 | Windows、Microsoft Word；默认优先 PowerShell 7+，未安装时以 Windows PowerShell 5.1 兼容模式运行。`scripts/word_report.ps1` 通过 Word COM 提取实际格式并生成文档。 |
 | 结构核验 | Python 辅助脚本，用于 OOXML 结构与模板约束检查。 |
 | 页面检查 | 可用的 DOCX 渲染器，或将 Word 导出的内部 PDF 渲染成页面图片的工具。仓库不包含 `render_docx.py`，最终分页以 Word 为准。 |
-| 命令行截图 | Windows Terminal + PowerShell；`scripts/console_shot.ps1` 抓取终端窗口客户区，`scripts/trim_console_shot.py` 裁掉空白。实验结果用真实截图，不用等宽文字冒充。 |
+| 命令行截图 | Windows Terminal + PowerShell（默认优先 7，可回退 5.1）；`scripts/console_shot.ps1` 等待运行成功后抓取专用窗口客户区。可选的 Python + Pillow 裁剪工具将空白裁到另一个文件，保留原图。 |
 | 可选图示 | 按任务配置绘图与导出工具；UML、项目取证等流程按需启用。 |
 
 内置生成器适合从唯一指定的段落开始替换到文末，边界前内容保留；任意局部修改或复杂格式迁移需要额外的受限适配。只改格式的任务保留原文，需要重写时应明确可编辑范围。
