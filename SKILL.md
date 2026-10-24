@@ -17,6 +17,7 @@ Separate content from formatting. Copy the reference; preserve its cover, sectio
 - Format transfer: inspect reference and target; preserve target content and map only authorized roles. Do not generate a replacement report. The bundled build engine supports tail replacement, not arbitrary format transfer; use a bounded COM adapter for the latter.
 - Software-project report: additionally read [project evidence](references/project-evidence-and-writing.md); inspect relevant code and tests, not every file by default.
 - Diagrams requested/required: read [figures](references/drawio-and-figure-qa.md). Create only useful figures. UML completeness rules apply only to relevant assignments.
+- Console run evidence requested/required: read [console screenshots](references/console-screenshots.md). Capture a real terminal run; monospaced text pasted from a console is not evidence.
 
 Do not load all references or infer project/diagram requirements from this skill's name.
 
@@ -62,7 +63,7 @@ Tables: read [table rules](references/academic-tables.md); copy reference exampl
 
 ## Bounded verification
 
-Read [verification](references/verification-and-delivery.md). Stabilize content, run structural/format assertions, then a full-page final render review. Every final page must be inspected. Word PDF export is native pagination evidence; use an available renderer for page images as described in verification. Zero format mismatches is not visual proof.
+Read [verification](references/verification-and-delivery.md). Stabilize content, run structural/format assertions, then a full-page final render review. When the report contains console captures, confirm each capture shows the prompt, command, input and output, and that no result caption is split from its image. Every final page must be inspected. Word PDF export is native pagination evidence; use an available renderer for page images as described in verification. Zero format mismatches is not visual proof.
 
 Repairs reuse the plan and cached profile. Rerender affected pages plus pagination spillover; global layout changes require rechecking all affected pages. Finish with a fresh complete render and review coverage for the delivered version. Do not repeat project research, diagram generation or unchanged extraction after local edits. Record concrete defects and stop when requirements/layout pass; do not add speculative rejection loops.
 

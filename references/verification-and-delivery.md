@@ -19,6 +19,16 @@ python scripts/compare_docx_contracts.py template_contract.json output_contract.
 
 Review every reported drift. Some content counts change when sections are filled; unexplained page setup, style, header/footer, table geometry, or protected-text drift is not acceptable.
 
+## Console screenshot checks
+
+When the report includes command-line evidence:
+
+- Every requested result has a capture; no monospaced text block stands in for a run.
+- Each capture shows the prompt, the executed command, the input and the program output.
+- Captures are inline, 10-11 cm wide, directly below their result caption, and the caption keeps with the image.
+- No capture is blank, black, cropped mid-line or split across pages.
+- The report names the terminal and the shell that were actually used.
+
 ## Word checks
 
 - Create a separate hidden Word instance.
